@@ -19,6 +19,13 @@ def search_directory(dir, ignore_list):
     # build a list of eggs we can develop by looking for "setup.py"
     to_develop = []
     for path, dirs, files in os.walk(dir):
+
+        # recurse through symlinks
+        for d in dirs:
+            dirpath = os.path.join(path, d)
+            if os.path.islink(dirpath):
+                to_develop.extend(search_directory(dirpath, ignore_list))
+            
         # Don't look for eggs in ignored directories
         if os.path.realpath(path) in ignore_list:
             dirs[:] = [] # this is bizarre python for emptying a list in a way that os.walk can react to
