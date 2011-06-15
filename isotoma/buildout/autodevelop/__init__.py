@@ -64,3 +64,28 @@ def load(buildout):
     # Apply config tweaks
     buildout["buildout"]["develop"] = "\n".join(to_develop)
 
+
+from zc.buildout.easy_installer import Installer, pkg_resources
+
+def _satisfied(self, req, source=None):
+    versions = []
+
+    dists = [d for d in self._env[req.project_name]]
+    if filter(lambda d: d.precedence == pkg_resources.DEVELOP_DIST, dists):
+        versions = filter(lambda s: s[0] == "==", req.specs)
+
+        req.specs = filter(lambda s: s[0] != "==", req.specs)
+        copy = pkg_resources.Requirement.parse(str(req))
+        req.index = copy.index
+
+    dist, avail = self._old_satisfied(req, source)
+
+    if versions:
+        dist._version = versions[0][1]
+
+    return dist, avail
+
+Installer._old_satisfied = Installer._satisfied
+Installer._satisfied = _satisfied
+
+
