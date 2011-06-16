@@ -1,7 +1,7 @@
 Changelog for isotoma.buildout.autodevelop
 ==========================================
 
-0.0.2 (unreleased)
+0.0.2 (2011-06-16)
 ------------------
 
 - If there are develop eggs, we will force them to be used over
