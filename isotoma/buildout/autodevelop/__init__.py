@@ -65,7 +65,7 @@ def load(buildout):
     buildout["buildout"]["develop"] = "\n".join(to_develop)
 
 
-from zc.buildout.easy_installer import Installer, pkg_resources
+from zc.buildout.easy_install import Installer, pkg_resources
 
 def _satisfied(self, req, source=None):
     versions = []
