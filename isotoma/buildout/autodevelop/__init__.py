@@ -80,7 +80,7 @@ def _satisfied(self, req, source=None):
 
     dist, avail = self._old_satisfied(req, source)
 
-    if versions:
+    if versions and dist:
         dist._version = versions[0][1]
 
     return dist, avail
