@@ -4,7 +4,7 @@ Changelog for isotoma.buildout.autodevelop
 0.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add ${autodevelop:mode} which can be ``deploy``, ``localeggs`` or ``checkout``.
 
 
 0.0.3 (2011-06-23)

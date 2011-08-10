@@ -12,7 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
+import os, sys, subprocess
+import zc.buildout.easy_install
+
+def get_version(path, python=sys.executable):
+    p = subprocess.Popen([python, "setup.py", "-V"], stdout=subprocess.PIPE, cwd=path)
+    o, e = p.communicate()
+    return o.strip()
+
+def get_name(path, python=sys.executable):
+    p = subprocess.Popen([python, "setup.py", "--name"], stdout=subprocess.PIPE, cwd=path)
+    o, e = p.communicate()
+    return o.strip()
+
+def localegg(path, python=sys.executable):
+    path = os.path.realpath(path)
+    name = get_name(path, python=python)
+    version = get_version(path, python=python)
+    p = subprocess.Popen(["python2.4", "setup.py", "sdist", "--formats=zip"], cwd=path)
+    p.communicate()
+    return os.path.join(path, "dist", "%s-%s.tar.gz" % (name, version))
 
 
 def search_directory(dir, ignore_list):
@@ -25,7 +44,7 @@ def search_directory(dir, ignore_list):
             dirpath = os.path.join(path, d)
             if os.path.islink(dirpath):
                 to_develop.extend(search_directory(dirpath, ignore_list))
-            
+
         # Don't look for eggs in ignored directories
         if os.path.realpath(path) in ignore_list:
             dirs[:] = [] # this is bizarre python for emptying a list in a way that os.walk can react to
@@ -45,7 +64,9 @@ def load(buildout):
     ignore_list_vars = ("parts-directory", "develop-eggs-directory", "eggs-directory", "bin-directory", "download-cache")
     ignore_list = []
     for ignore in ignore_list_vars:
-        ignore_list.append(os.path.realpath(buildout["buildout"][ignore]))
+        var = buildout['buildout'].get(ignore, '')
+        if var:
+            ignore_list.append(os.path.realpath(var))
 
     # Allow the user to provide specific directories to autodevelop, and cope with whitespace at beginning, middle or end
     # Default to scanning current working directory
@@ -57,12 +78,27 @@ def load(buildout):
         to_develop.extend(search_directory(os.path.realpath(line), ignore_list))
 
     # Don't overwrite any develop values that were set manually
-    develop = buildout["buildout"].get("develop", "")
+    develop = buildout["buildout"].get("develop", "").strip().split("\n")
     if develop:
-        to_develop.append(develop)
+        to_develop.extend(develop)
 
-    # Apply config tweaks
-    buildout["buildout"]["develop"] = "\n".join(to_develop)
+    mode = buildout.get("autodevelop", {}).get("mode", "checkout")
+
+    if mode == "checkout":
+        # Apply config tweaks
+        buildout["buildout"]["develop"] = "\n".join(to_develop)
+
+    if mode == "localeggs":
+        find_links = buildout.get('find-links', '').strip().split('\n')
+        find_links.extend([localegg(path) for path in to_develop])
+        buildout["buildout"]["find-links"] = '\n'.join(find_links)
+
+    if mode in ("localeggs", "deploy"):
+        buildout._raw.setdefault("versions", {})
+        buildout._raw["versions"].update(
+            dict((get_name(path), get_version(path)) for path in to_develop))
+
+        zc.buildout.easy_install.default_versions(buildout._raw["versions"])
 
 
 from zc.buildout.easy_install import Installer, pkg_resources
