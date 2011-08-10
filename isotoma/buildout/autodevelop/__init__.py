@@ -58,6 +58,12 @@ def search_directory(dir, ignore_list):
     return to_develop
 
 
+def split(lst):
+    for itm in lst.strip().split('\n'):
+        if itm.strip():
+            yield itm.strip()
+
+
 def load(buildout):
     # build a list of buildout managed directories to *not* check for develop eggs
     # use realpath to make sure they are in an expected and consistent format
@@ -71,14 +77,11 @@ def load(buildout):
     # Allow the user to provide specific directories to autodevelop, and cope with whitespace at beginning, middle or end
     # Default to scanning current working directory
     to_develop = []
-    for line in buildout["buildout"].get("autodevelop", ".").strip().split("\n"):
-        line = line.strip()
-        if not line:
-            continue
+    for line in split(buildout["buildout"].get("autodevelop", ".")):
         to_develop.extend(search_directory(os.path.realpath(line), ignore_list))
 
     # Don't overwrite any develop values that were set manually
-    develop = buildout["buildout"].get("develop", "").strip().split("\n")
+    develop = split(buildout["buildout"].get("develop", ""))
     if develop:
         to_develop.extend(develop)
 
@@ -89,7 +92,7 @@ def load(buildout):
         buildout["buildout"]["develop"] = "\n".join(to_develop)
 
     if mode == "localeggs":
-        find_links = buildout.get('find-links', '').strip().split('\n')
+        find_links = split(buildout.get('find-links', ''))
         find_links.extend([localegg(path) for path in to_develop])
         buildout["buildout"]["find-links"] = '\n'.join(find_links)
 
