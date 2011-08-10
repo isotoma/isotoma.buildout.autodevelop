@@ -81,7 +81,7 @@ def load(buildout):
         to_develop.extend(search_directory(os.path.realpath(line), ignore_list))
 
     # Don't overwrite any develop values that were set manually
-    develop = split(buildout["buildout"].get("develop", ""))
+    develop = list(split(buildout["buildout"].get("develop", "")))
     if develop:
         to_develop.extend(develop)
 
@@ -92,7 +92,7 @@ def load(buildout):
         buildout["buildout"]["develop"] = "\n".join(to_develop)
 
     if mode == "localeggs":
-        find_links = split(buildout.get('find-links', ''))
+        find_links = list(split(buildout.get('find-links', '')))
         find_links.extend([localegg(path) for path in to_develop])
         buildout["buildout"]["find-links"] = '\n'.join(find_links)
 
