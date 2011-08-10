@@ -1,7 +1,7 @@
 Changelog for isotoma.buildout.autodevelop
 ==========================================
 
-0.0.7 (unreleased)
+0.0.7 (2011-08-10)
 ------------------
 
 - Brown paper bag
