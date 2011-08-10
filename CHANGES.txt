@@ -4,7 +4,7 @@ Changelog for isotoma.buildout.autodevelop
 0.0.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- localeggs() builds zips so that this extension is python2.4 safe
 
 
 0.0.5 (2011-08-10)
