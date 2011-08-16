@@ -77,7 +77,8 @@ def load(buildout):
     # The search directories are either ${autodevelop:directories}, ${buildout:autodevelop}, ${buildout:cwd} or '.'
     search_directories = buildout.get("autodevelop", {}).get('directories', \
         buildout["buildout"].get("autodevelop",  \
-        buildout['buildout'].get('cwd', '.')))
+        buildout['buildout'].get('cwd', \
+        buildout['buildout']['directory'])))
 
     # Search the search directories. Cope with withspace and stuff.
     to_develop = []
