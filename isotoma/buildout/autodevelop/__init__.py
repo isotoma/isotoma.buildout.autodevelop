@@ -74,10 +74,14 @@ def load(buildout):
         if var:
             ignore_list.append(os.path.realpath(var))
 
-    # Allow the user to provide specific directories to autodevelop, and cope with whitespace at beginning, middle or end
-    # Default to scanning current working directory
+    # The search directories are either ${autodevelop:directories}, ${buildout:autodevelop}, ${buildout:cwd} or '.'
+    search_directories = buildout.get("autodevelop", {}).get('directories', \
+        buildout["buildout"].get("autodevelop",  \
+        buildout['buildout'].get('cwd', '.')))
+
+    # Search the search directories. Cope with withspace and stuff.
     to_develop = []
-    for line in split(buildout["buildout"].get("autodevelop", ".")):
+    for line in split(search_directories):
         to_develop.extend(search_directory(os.path.realpath(line), ignore_list))
 
     # Don't overwrite any develop values that were set manually
