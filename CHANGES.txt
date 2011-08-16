@@ -1,7 +1,7 @@
 Changelog for isotoma.buildout.autodevelop
 ==========================================
 
-0.0.8 (unreleased)
+0.0.8 (2011-08-16)
 ------------------
 
 - Nothing changed yet.
