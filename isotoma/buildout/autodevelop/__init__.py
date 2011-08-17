@@ -101,35 +101,10 @@ def load(buildout):
         find_links.extend([localegg(path) for path in to_develop])
         buildout["buildout"]["find-links"] = '\n'.join(find_links)
 
-    if mode in ("localeggs", "deploy"):
-        buildout._raw.setdefault("versions", {})
-        buildout._raw["versions"].update(
-            dict((get_name(path), get_version(path)) for path in to_develop))
+    buildout._raw.setdefault("versions", {})
+    buildout._raw["versions"].update(
+        dict((get_name(path), get_version(path)) for path in to_develop))
 
-        zc.buildout.easy_install.default_versions(buildout._raw["versions"])
-
-
-from zc.buildout.easy_install import Installer, pkg_resources
-
-def _satisfied(self, req, source=None):
-    versions = []
-
-    dists = [d for d in self._env[req.project_name]]
-    if filter(lambda d: d.precedence == pkg_resources.DEVELOP_DIST, dists):
-        versions = filter(lambda s: s[0] == "==", req.specs)
-
-        req.specs = filter(lambda s: s[0] != "==", req.specs)
-        copy = pkg_resources.Requirement.parse(str(req))
-        req.index = copy.index
-
-    dist, avail = self._old_satisfied(req, source)
-
-    if versions and dist:
-        dist._version = versions[0][1]
-
-    return dist, avail
-
-Installer._old_satisfied = Installer._satisfied
-Installer._satisfied = _satisfied
+    zc.buildout.easy_install.default_versions(buildout._raw["versions"])
 
 
