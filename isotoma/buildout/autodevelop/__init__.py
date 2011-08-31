@@ -65,6 +65,10 @@ def split(lst):
 
 
 def load(buildout):
+    mode = buildout.get("autodevelop", {}).get("mode", "checkout")
+    if not mode in ("checkout", "localeggs", "deploy"):
+        return
+
     # build a list of buildout managed directories to *not* check for develop eggs
     # use realpath to make sure they are in an expected and consistent format
     ignore_list_vars = ("parts-directory", "develop-eggs-directory", "eggs-directory", "bin-directory", "download-cache")
@@ -90,8 +94,6 @@ def load(buildout):
     if develop:
         to_develop.extend(develop)
 
-    mode = buildout.get("autodevelop", {}).get("mode", "checkout")
-
     if mode == "checkout":
         # Apply config tweaks
         buildout["buildout"]["develop"] = "\n".join(to_develop)
@@ -106,5 +108,4 @@ def load(buildout):
         dict((get_name(path), get_version(path)) for path in to_develop))
 
     zc.buildout.easy_install.default_versions(buildout._raw["versions"])
-
 
