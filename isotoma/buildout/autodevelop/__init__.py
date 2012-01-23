@@ -15,6 +15,9 @@
 import os, sys, subprocess
 import zc.buildout.easy_install
 
+import logging
+logger = logging.getLogger(__name__)
+
 def get_version(path, python=sys.executable):
     p = subprocess.Popen([python, "setup.py", "-V"], stdout=subprocess.PIPE, cwd=path)
     o, e = p.communicate()
@@ -71,12 +74,20 @@ def load(buildout):
 
     # build a list of buildout managed directories to *not* check for develop eggs
     # use realpath to make sure they are in an expected and consistent format
-    ignore_list_vars = ("parts-directory", "develop-eggs-directory", "eggs-directory", "bin-directory", "download-cache")
+    ignore_list_vars = ("develop-eggs-directory", "eggs-directory", "bin-directory", "download-cache")
     ignore_list = []
     for ignore in ignore_list_vars:
         var = buildout['buildout'].get(ignore, '')
         if var:
             ignore_list.append(os.path.realpath(var))
+
+    # Add each of the parts directories to the list of ignored directories
+    parts = split(buildout["buildout"]["parts"])
+    parts_dir = buildout["buildout"]["parts-directory"]
+    for part in parts:
+        ignore_list.append(os.path.join(parts_dir, part))
+
+    logger.debug("Not searching for packages in %s" % ", ".join(ignore_list))
 
     # The search directories are either ${autodevelop:directories}, ${buildout:autodevelop}, ${buildout:cwd} or '.'
     search_directories = buildout.get("autodevelop", {}).get('directories', \
