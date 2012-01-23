@@ -1,10 +1,11 @@
 Changelog for isotoma.buildout.autodevelop
 ==========================================
 
-0.0.11 (unreleased)
+0.0.11 (2011-01-23)
 -------------------
 
-- Nothing changed yet.
+- buildout:directory will now be searched even if
+  buildout:parts-directory == buildout:directory
 
 
 0.0.10 (2011-08-31)
