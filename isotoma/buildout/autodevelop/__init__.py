@@ -72,6 +72,8 @@ def load(buildout):
     if not mode in ("checkout", "localeggs", "deploy"):
         return
 
+    buildout['autodevelop']['developed'] = ''
+
     # build a list of buildout managed directories to *not* check for develop eggs
     # use realpath to make sure they are in an expected and consistent format
     ignore_list_vars = ("develop-eggs-directory", "eggs-directory", "bin-directory", "download-cache")
@@ -108,6 +110,7 @@ def load(buildout):
     if mode == "checkout":
         # Apply config tweaks
         buildout["buildout"]["develop"] = "\n".join(to_develop)
+        buildout["autodevelop"]['developed'] = "\n".join([get_name(d) for d in to_develop])
 
     if mode == "localeggs":
         find_links = list(split(buildout.get('find-links', '')))
