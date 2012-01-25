@@ -107,6 +107,10 @@ def load(buildout):
     if develop:
         to_develop.extend(develop)
 
+    # We reverse sort based on the path to the develop eggs. This way we have a consistent ordering that
+    # is compatible with zope.testing.testrunner
+    to_develop.sort(reverse=True)
+
     if mode == "checkout":
         # Apply config tweaks
         buildout["buildout"]["develop"] = "\n".join(to_develop)
