@@ -4,7 +4,7 @@ Changelog for isotoma.buildout.autodevelop
 0.0.12 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Any eggs that have been developed will be added to ${autodevelop:developed}
 
 
 0.0.11 (2011-01-23)
