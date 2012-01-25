@@ -4,11 +4,14 @@ Autodevelop buildout extension
 This package provides a buildout_ extension for automatically developing source eggs
 in the current project.
 
+You might also want to look at mr.developer which does a similar job but also
+manages your SCM interactions, which autodevelop explicitly does NOT do.
+
 .. _buildout: http://pypi.python.org/pypi/zc.buildout
 
 
-Logging your buildout run
--------------------------
+Finding your develop eggs automatically
+---------------------------------------
 
 You just need to add an extension to your buildout.cfg::
 
@@ -27,6 +30,46 @@ to search::
         externals
 
 This will develop any source eggs contained in your src and externals directories.
+
+
+Testing 'real' eggs automatically
+---------------------------------
+
+We package all our eggs and deploy from a local PyPI mirror. It's useful to be
+able to automatically run the egg build and test the buildout with that egg,
+rather than the checkout. You will flush out your MANIFEST problems if you make
+use of this.
+
+You need to put the extension into 'localeggs' mode::
+
+    [buildout]
+    extensions = isotoma.buildout.autodevelop
+
+    [autodevelop]
+    mode = localeggs
+
+Under the hood, the extension will call ``python setup.py sdist`` for each egg
+that would have been developed and rewrites ``${buildout:find-links}`` to use
+that.
+
+
+Automatic version numbers
+-------------------------
+
+You probably won't want this, its a bit of an edge case.
+
+If you are deploying from an SVN tag that contains your source code but you
+want the deployment to use eggs from your PyPI mirror anyway then autodevelop
+can automatically update the pins in your buildout to match the version of the
+code in your tag, by rewriting the [versions] section of your config.
+
+This looks like this::
+
+    [buildout]
+    extensions = isotoma.buildout.autodevelop
+
+    [autodevelop]
+     mode = deploy
 
 
 Optional Parameters
