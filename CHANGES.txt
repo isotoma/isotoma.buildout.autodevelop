@@ -1,7 +1,7 @@
 Changelog for isotoma.buildout.autodevelop
 ==========================================
 
-0.0.14 (unreleased)
+0.0.14 (2012-02-01)
 -------------------
 
 - Work even if ``[autodevelop]`` isnt present.
