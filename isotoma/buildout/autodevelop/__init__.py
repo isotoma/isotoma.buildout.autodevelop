@@ -72,6 +72,7 @@ def load(buildout):
     if not mode in ("checkout", "localeggs", "deploy"):
         return
 
+    buildout._raw.setdefault("autodevelop", {})
     buildout['autodevelop']['developed'] = ''
 
     # build a list of buildout managed directories to *not* check for develop eggs
