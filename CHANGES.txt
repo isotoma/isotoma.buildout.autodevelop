@@ -4,7 +4,7 @@ Changelog for isotoma.buildout.autodevelop
 0.0.15 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Set ${autodevelop:developed} to '' if not using autodevelop (i.e. mode = off)
 
 
 0.0.14 (2012-02-01)

@@ -68,12 +68,12 @@ def split(lst):
 
 
 def load(buildout):
+    buildout._raw.setdefault("autodevelop", {})
+    buildout['autodevelop']['developed'] = ''
+
     mode = buildout.get("autodevelop", {}).get("mode", "checkout")
     if not mode in ("checkout", "localeggs", "deploy"):
         return
-
-    buildout._raw.setdefault("autodevelop", {})
-    buildout['autodevelop']['developed'] = ''
 
     # build a list of buildout managed directories to *not* check for develop eggs
     # use realpath to make sure they are in an expected and consistent format
