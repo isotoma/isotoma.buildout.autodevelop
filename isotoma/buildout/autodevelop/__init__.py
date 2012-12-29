@@ -36,6 +36,9 @@ def localegg(path, python=sys.executable):
     p.communicate()
     return os.path.join(path, "dist", "%s-%s.zip" % (name, version))
 
+def part_names(buildout):
+    """part names where the part has a "recipe" key"""
+    return [p for p in buildout.keys() if buildout._raw[p].has_key('recipe')]
 
 def search_directory(dir, ignore_list):
     # build a list of eggs we can develop by looking for "setup.py"
@@ -85,7 +88,7 @@ def load(buildout):
             ignore_list.append(os.path.realpath(var))
 
     # Add each of the parts directories to the list of ignored directories
-    parts = split(buildout["buildout"]["parts"])
+    parts = part_names(buildout)
     parts_dir = buildout["buildout"]["parts-directory"]
     for part in parts:
         ignore_list.append(os.path.join(parts_dir, part))
