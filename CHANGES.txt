@@ -4,7 +4,13 @@ Changelog for isotoma.buildout.autodevelop
 0.0.16 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- We do not autodevelop any "parts" directorys which means we need a list of
+  part names to concatenate with the value of ``buildout:parts-directory``.
+  Previously, this list was determined by evaluating ``${buildout:parts}``,
+  however that didn't include parts that are pulled in automatically when
+  referred to by other parts. Instead, we now get a list of part names by
+  inspecting ``buildout.keys()``, filtered down to which of those parts have an
+  assigned ``recipe``.
 
 
 0.0.15 (2012-03-01)
