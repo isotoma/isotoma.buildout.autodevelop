@@ -1,7 +1,7 @@
 Changelog for isotoma.buildout.autodevelop
 ==========================================
 
-0.0.16 (unreleased)
+0.0.16 (2012-12-31)
 -------------------
 
 - We do not autodevelop any "parts" directorys which means we need a list of
