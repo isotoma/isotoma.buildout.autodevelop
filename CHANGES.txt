@@ -1,8 +1,8 @@
 Changelog for isotoma.buildout.autodevelop
 ==========================================
 
-0.0.17 (unreleased)
-------------------
+0.0.17 (2013-01-07)
+-------------------
 
 - Fix to work when setuptools is only available in bootstrapped environment.
   This happens when using python2.7 on lucid with deadsnakes repo without
