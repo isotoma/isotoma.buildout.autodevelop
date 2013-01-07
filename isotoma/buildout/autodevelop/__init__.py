@@ -18,13 +18,25 @@ import zc.buildout.easy_install
 import logging
 logger = logging.getLogger(__name__)
 
+def frigged_environment(python):
+    env = os.environ.copy()
+    if python == sys.executable:
+        setup_path = os.path.dirname(__import__("setuptools").__file__) + os.path.sep + os.path.pardir
+        setup_path = os.path.realpath(setup_path)
+        if 'PYTHONPATH' in env:
+            old_pythonpath = env['PYTHONPATH'].split(':')
+            env['PYTHONPATH'] = ":".join(chain([setup_path], old_pythonpath))
+        else:
+            env['PYTHONPATH'] = setup_path
+    return env
+
 def get_version(path, python=sys.executable):
-    p = subprocess.Popen([python, "setup.py", "-V"], stdout=subprocess.PIPE, cwd=path)
+    p = subprocess.Popen([python, "setup.py", "-V"], stdout=subprocess.PIPE, cwd=path, env=frigged_environment(python))
     o, e = p.communicate()
     return o.strip()
 
 def get_name(path, python=sys.executable):
-    p = subprocess.Popen([python, "setup.py", "--name"], stdout=subprocess.PIPE, cwd=path)
+    p = subprocess.Popen([python, "setup.py", "--name"], stdout=subprocess.PIPE, cwd=path, env=frigged_environment(python))
     o, e = p.communicate()
     return o.strip()
 

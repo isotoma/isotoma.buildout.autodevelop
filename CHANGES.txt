@@ -4,7 +4,10 @@ Changelog for isotoma.buildout.autodevelop
 0.0.17 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix to work when setuptools is only available in bootstrapped environment.
+  This happens when using python2.7 on lucid with deadsnakes repo without
+  distribute package. This release lets it import the setuptools that you
+  bootstrapped into your eggs-directory.
 
 
 0.0.16 (2012-12-31)
