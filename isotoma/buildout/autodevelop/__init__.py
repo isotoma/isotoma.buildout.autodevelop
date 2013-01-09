@@ -14,6 +14,7 @@
 
 import os, sys, subprocess
 import zc.buildout.easy_install
+from itertools import chain
 
 import logging
 logger = logging.getLogger(__name__)

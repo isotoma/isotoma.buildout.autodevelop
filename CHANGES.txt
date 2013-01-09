@@ -4,7 +4,7 @@ Changelog for isotoma.buildout.autodevelop
 0.0.18 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix missing import.
 
 
 0.0.17 (2013-01-07)
