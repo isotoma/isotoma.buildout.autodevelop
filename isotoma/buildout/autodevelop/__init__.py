@@ -45,7 +45,7 @@ def localegg(path, python=sys.executable):
     path = os.path.realpath(path)
     name = get_name(path, python=python)
     version = get_version(path, python=python)
-    p = subprocess.Popen(["python2.4", "setup.py", "sdist", "--formats=zip"], cwd=path)
+    p = subprocess.Popen([python, "setup.py", "sdist", "--formats=zip"], cwd=path)
     p.communicate()
     return os.path.join(path, "dist", "%s-%s.zip" % (name, version))
 
