@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '0.0.19'
+version = '0.0.20.dev0'
 
 setup(
     name = "isotoma.buildout.autodevelop",
