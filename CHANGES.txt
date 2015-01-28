@@ -4,7 +4,7 @@ Changelog for isotoma.buildout.autodevelop
 0.0.19 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix local egg mode on newer pythons.
 
 
 0.0.18 (2013-01-09)
